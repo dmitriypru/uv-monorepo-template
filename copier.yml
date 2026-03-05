@@ -1,0 +1,64 @@
+component_type:
+  type: str
+  help: "What do you want to scaffold?"
+  choices:
+    - Base
+    - Service
+    - Library
+  default: Base
+
+# Base questions
+project_name:
+  type: str
+  help: "What is the name of this monorepo?"
+  default: "fastapi-monorepo"
+  when: "{{ component_type == 'Base' }}"
+
+python_version:
+  type: str
+  help: "What Python version will this component use?"
+  default: "3.14"
+  choices:
+    - "3.14"
+    - "3.13"
+    - "3.12"
+    - "3.11"
+    - "3.10"
+    - "3.9"
+    - "3.8"
+
+# Service/Library questions
+name:
+  type: str
+  help: "What is the name of this component?"
+  default: "my-component"
+  when: "{{ component_type in ['Service', 'Library'] }}"
+
+description:
+  type: str
+  help: "Short description of the component."
+  default: "My component"
+  when: "{{ component_type in ['Service', 'Library'] }}"
+
+port:
+  type: str
+  help: "What port should this service expose? (Leave empty to omit port)"
+  default: "8000"
+  when: "{{ component_type == 'Service' }}"
+
+_subdirectory: >-
+  {%- if component_type == 'Base' -%}base/template
+  {%- elif component_type == 'Service' -%}service/template
+  {%- else -%}library/template{%- endif -%}
+
+_tasks:
+  - >-
+    {%- if component_type == 'Service' -%}
+    python "{{ _copier_conf.src_path }}/service/update_compose.py" "{{ name }}"
+    {%- endif -%}
+  - >-
+    {%- if component_type == 'Service' -%}
+    python "{{ _copier_conf.src_path }}/service/update_readme.py" service "{{ name }}" "{{ description }}"
+    {%- elif component_type == 'Library' -%}
+    python "{{ _copier_conf.src_path }}/library/update_readme.py" library "{{ name }}" "{{ description }}"
+    {%- endif -%}

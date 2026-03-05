@@ -1,0 +1,13 @@
+services:
+  {{ name }}:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      additional_contexts:
+        - root=../../
+    networks:
+      - default
+{% if port %}
+    ports:
+      - "{{ port }}:{{ port }}"
+{% endif %}

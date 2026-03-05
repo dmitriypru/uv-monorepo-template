@@ -1,0 +1,10 @@
+{% set major, minor = python_version.split('.') %}
+[project]
+name = "{{ name }}"
+version = "0.0.1"
+description = "{{ description }}"
+requires-python = ">={{ python_version }}.0, <{{ major }}.{{ minor|int + 1 }}"
+dependencies = []
+
+[tool.uv]
+package = false

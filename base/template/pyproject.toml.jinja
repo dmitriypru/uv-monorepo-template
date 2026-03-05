@@ -1,0 +1,51 @@
+{% set major, minor = python_version.split('.') %}
+[project]
+name = "{{ project_name }}"
+version = "0.0.1"
+requires-python = ">={{ python_version }}.0, <{{ major }}.{{ minor|int + 1 }}"
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = [
+    "projects/*",
+    "shared/*"
+]
+
+[dependency-groups]
+dev = ["ruff>=0.15.5", "pre-commit>=4.5.1", "pyright>=1.1.408"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py{{ python_version | replace('.', '') }}"
+exclude = [".*"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "B", "Q", "I"]
+unfixable = ["B"]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.params.Depends",
+    "fastapi.Query",
+    "fastapi.params.Query",
+    "fastapi.Path",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402"]
+"**/{tests}/*" = ["E402"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+include = ["projects", "shared"]
+reportMissingTypeStubs = false
+reportMissingImports = false
+reportUnknownVariableType = false
+typeCheckingMode = "basic"

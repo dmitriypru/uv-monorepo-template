@@ -1,0 +1,49 @@
+name: Test Copier Templates
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test-template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          enable-cache: false
+
+      - name: Create working directory
+        run: mkdir -p /tmp/test-monorepo
+
+      - name: Generate Base Template
+        run: |
+          uvx copier copy --trust --vcs-ref=HEAD  ./ /tmp/test-monorepo \
+            -d component_type="Base" -d project_name="test-monorepo" -d python_version="3.14" --defaults
+
+      - name: Generate Shared Library Component
+        run: |
+          uvx copier copy --trust --vcs-ref=HEAD ./ /tmp/test-monorepo \
+            -d component_type="Library" -d name="core" -d description="Core utils" --defaults
+
+      - name: Generate API Service Component
+        run: |
+          uvx copier copy --trust --vcs-ref=HEAD ./ /tmp/test-monorepo \
+            -d component_type="Service" -d name="api" -d description="API service" -d port=8000 --defaults
+
+      - name: Run uv sync
+        working-directory: /tmp/test-monorepo
+        run: uv sync
+
+      - name: Verify Docker Compose config
+        working-directory: /tmp/test-monorepo
+        run: docker compose config
+
+      - name: Dry-run Docker Compose build
+        working-directory: /tmp/test-monorepo
+        run: docker compose build

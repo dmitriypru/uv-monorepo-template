@@ -1,0 +1,96 @@
+# {{ project_name }}
+
+## Requirements
+
+* Python {{ python_version }}
+* Docker
+* [uv](https://docs.astral.sh/uv/)
+
+## Directory structure
+
+Top-level:
+* `shared`: Contains the source code of the shared packages with shared components.
+* `projects`: Contains folders for each project.
+* `pyproject.toml`: Contains the repo-level dev dependencies with ruff and pyright included.
+* `docker-compose.yaml`: Contains the Docker Compose configuration for the repo (for development).
+
+Project structure:
+* `src`: Contains the source code of the project. Used as workdir for Python.
+* `test`: Contains the test code of the project.
+* `Dockerfile`: Contains the Dockerfile for the project.
+* `README.md`: Contains the README file for the project.
+* `pyproject.toml`: Contains the project-level dependencies for the project.
+
+List of our services:
+<!-- COPIER_SERVICES_START -->
+<!-- COPIER_SERVICES_END -->
+
+List of our libraries:
+* `{{ project_name }}`: Contains uv workspace setup, ruff, pyright, and pre-commit.
+<!-- COPIER_LIBRARIES_START -->
+<!-- COPIER_LIBRARIES_END -->
+
+## Usage
+
+1. Install all (repo-level + project-level for all projects) dependencies:
+   ```bash
+   uv sync --all-packages --all-extras
+   ```
+2. Skip dependencies of a specific project:
+   ```bash
+   uv sync --no-install-package <our package you want to skip>
+   ```
+   You can skip multiple projects by passing multiple `--no-install-package` flags.
+3. Add new dependencies to specific project:
+   ```bash
+   uv add --package <our package> <dependency>
+   ```
+   Example:
+   ```bash
+    uv add --package ml-experiments pyyaml
+    uv add --package shared.ml shared.core
+    ```
+
+## Development dependencies
+
+This repo uses several tools to maintain code quality and consistency:
+
+### Linter
+
+[Ruff](https://github.com/astral-sh/ruff) is used as a linter and formatter. [Editor integration](https://docs.astral.sh/ruff/editors/).
+
+To run the linter:
+```shell
+# highlight problems
+ruff check
+
+# highlight and fix problems
+ruff check --fix
+```
+
+To run the formatter:
+```shell
+ruff format
+```
+
+### Type checking
+
+[Pyright](https://github.com/microsoft/pyright) is used for static type checking. [Editor integration](https://microsoft.github.io/pyright/#/installation?id=installation) (pyright binary is stored in the venv, default path from project root: `./.venv/bin/pyright-langserver`)
+
+To run type checking:
+```shell
+pyright
+```
+
+### Pre-commit hook
+
+This project uses pre-commit hooks to ensure code quality before committing. To set up pre-commit hooks:
+
+```shell
+pre-commit install
+```
+
+Run against all files (good idea to run it once after the installation):
+```shell
+pre-commit run --all-files
+```

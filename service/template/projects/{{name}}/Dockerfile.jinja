@@ -1,0 +1,35 @@
+FROM ghcr.io/astral-sh/uv:python{{ python_version }}-bookworm-slim AS builder
+
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_PYTHON_DOWNLOADS=0
+
+WORKDIR /app/projects/{{ name }}
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=shared,target=/app/shared,from=root \
+    --mount=type=bind,source=uv.lock,target=/app/uv.lock,from=root \
+    --mount=type=bind,source=pyproject.toml,target=/app/pyproject.toml,from=root \
+    --mount=type=bind,source=projects/{{ name }}/pyproject.toml,target=/app/projects/{{ name }}/pyproject.toml,from=root \
+    uv sync --frozen --no-install-project --no-dev
+
+COPY . /app/projects/{{ name }}/
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=shared,target=/app/shared,from=root \
+    --mount=type=bind,source=uv.lock,target=/app/uv.lock,from=root \
+    --mount=type=bind,source=pyproject.toml,target=/app/pyproject.toml,from=root \
+    uv sync --frozen --no-dev
+
+
+FROM python:{{ python_version }}-slim-bookworm
+
+ENV PATH="/app/.venv/bin:$PATH"
+
+COPY --from=builder /app/.venv /app/.venv
+COPY --from=builder /app/projects/{{ name }} /app/projects/{{ name }}/
+COPY --from=root shared /app/shared/
+
+WORKDIR /app/projects/{{ name }}
+
+CMD ["python", "src/__main__.py"]

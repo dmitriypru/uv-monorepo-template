@@ -1,0 +1,15 @@
+*
+!uv.lock
+!shared/
+!pyproject.toml
+!projects/
+
+.env
+.ruff_cache/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*/__pycache__/
