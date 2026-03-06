@@ -19,7 +19,8 @@ Provide a unified foundation for your microservices while seamlessly maintaining
 - **`uv` Workspace Native**: All components are instantly auto-discovered. No `sys.path` appending, no manual `pyproject.toml` references. Just drop in a component and `uv sync`.
 - **Intelligent BuildKit Contexts**: Docker builds leverage `--mount=type=bind,source=shared,from=root` to selectively inject shared monorepo components into isolated service builds, preserving cache limits and eliminating daemon payload bloat.
 - **Dynamic Compositions**: The root `docker-compose.yaml` and `README.md` automatically auto-wire to include new microservices and libraries as they are generated.
-- **Customizable**: Choose your Python constraints (3.8-3.14) and explicitly opt-in/out of elements like exposed port mappings or postgres databases.
+- **Premium DX Tooling**: Ships pre-configured with industry-standard developer experience tools: **Ruff** for linting/formatting, **Pyright** for static type checking, and **pre-commit** hooks to enforce repository standards out of the box.
+- **Customizable**: Choose your Python constraints (3.8-3.14) and explicitly opt-in/out of elements like exposed port mappings.
 
 ---
 
