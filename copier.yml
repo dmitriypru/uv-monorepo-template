@@ -11,7 +11,7 @@ component_type:
 project_name:
   type: str
   help: "What is the name of this monorepo?"
-  default: "fastapi-monorepo"
+  default: "monorepo-template"
   when: "{{ component_type == 'Base' }}"
 
 python_version:

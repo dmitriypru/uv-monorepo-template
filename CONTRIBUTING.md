@@ -1,4 +1,4 @@
-# Contributing to the FastAPI monorepo template
+# Contributing to the uv monorepo template
 
 When adding features or fixing bugs in the templates:
 
