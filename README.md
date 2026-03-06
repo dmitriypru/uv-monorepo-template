@@ -4,7 +4,7 @@
 [![uv](https://img.shields.io/badge/uv-Astral-purple)](https://github.com/astral-sh/uv)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Copier](https://img.shields.io/badge/Copier-Template-green)](https://copier.readthedocs.io/)
-[![Actions status](https://github.com/dmitriypru/fastapi-uv-monorepo-template/workflows/ci.yml/badge.svg)](https://github.com/dmitriypru/fastapi-uv-monorepo-template/actions)
+[![Actions status](https://github.com/dmitriypru/fastapi-uv-monorepo-template/actions/workflows/ci.yml/badge.svg)](https://github.com/dmitriypru/fastapi-uv-monorepo-template/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A production-ready [Copier](https://copier.readthedocs.io/) template for scaffolding a modern **FastAPI monorepo**. Built aggressively around strict `uv` workspaces and BuildKit-optimized multi-stage Docker builds.
